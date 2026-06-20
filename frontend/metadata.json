@@ -1,0 +1,6 @@
+{
+  "name": "Debate Labs",
+  "description": "Next-generation debate training platform and analytical command center.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
