@@ -1,5 +1,3 @@
-from calendar import c
-
 from fastapi import HTTPException, status
 
 class NotFoundError(HTTPException):

@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     JWT_REFRESH_TOKEN_EXPIRE_MINUTES: int
 
     model_config = {
-        "env_file": ".env"
+        "env_file": ".env",
+        "extra": "ignore"
     }
 
 settings = Settings()
