@@ -36,6 +36,7 @@ class StudentProfile(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
     bio: Mapped[str | None] = mapped_column(Text, nullable=True)
     school_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    grade_level: Mapped[str | None] = mapped_column(String(100), nullable=True)    
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
