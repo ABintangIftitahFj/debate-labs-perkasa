@@ -221,17 +221,6 @@ Update the authenticated user's profile. Partial updates supported.
 - `401` — Not authenticated
 - `404` — User not found
 
----
-
-### `GET /v1/users/{user_id}`
-
-Get any user by ID. Public endpoint (no auth required).
-
-**Response `200`:** Returns `UserResponse`.
-
-**Errors:**
-- `404` — User not found
-
 ## JWT Details
 
 **Access token claims:**

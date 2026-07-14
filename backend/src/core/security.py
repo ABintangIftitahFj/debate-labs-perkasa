@@ -16,7 +16,8 @@ from src.core.database import get_db
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # HTTPBearer extracts Authorization header -> HTTPAuthorizationCredentials
-security = HTTPBearer()
+# auto_error=False: return None instead of 401/403 when header is missing — we handle it below
+security = HTTPBearer(auto_error=False)
 
 
 def hash_password(password: str) -> str:
@@ -76,7 +77,7 @@ def decode_token(token: str) -> dict:
 
 
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
     db: AsyncSession = Depends(get_db),
 ):
     """FastAPI dependency: verify access token, return User with profiles loaded.
@@ -85,6 +86,11 @@ async def get_current_user(
     selectinload on both profiles prevents greenlet errors on attribute access.
     """
     from src.modules.user.repository import User
+
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing Authorization header"
+        )
 
     payload = decode_token(credentials.credentials)
     if payload.get("type") != "access":

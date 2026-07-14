@@ -38,7 +38,7 @@ app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,  # Bearer tokens in headers, not cookies — credentials mode not needed
     allow_methods=["*"],
     allow_headers=["*"],
 )

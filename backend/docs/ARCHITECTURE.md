@@ -113,7 +113,7 @@ backend/
 | `router.py` | `service.py`, `schemas.py`, `core.security` |
 | `service.py` | `repository.py`, `schemas.py`, other module services (explicit only) |
 | `repository.py` | `core.database`, SQLAlchemy models only |
-| `schemas.py` | Pydantic only (no internal imports) |
+| `schemas.py` | Pydantic only; shared enums/types from `repository.py` are allowed |
 
 ### Forbidden
 

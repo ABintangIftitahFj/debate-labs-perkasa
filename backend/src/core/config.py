@@ -3,9 +3,11 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DATABASE_URL: str
-    POSTGRES_DB: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
+    # Postgres credentials — only required in Docker (docker-compose uses them to provision the container).
+    # The app itself only uses DATABASE_URL, so these are optional for non-Docker environments.
+    POSTGRES_DB: str = ""
+    POSTGRES_USER: str = ""
+    POSTGRES_PASSWORD: str = ""
 
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str

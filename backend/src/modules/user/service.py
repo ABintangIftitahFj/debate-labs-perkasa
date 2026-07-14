@@ -156,7 +156,7 @@ class UserService:
         # Local import to avoid circular dependency (schemas imports UserRole from repo)
         from src.modules.user.schemas import UserCreate
 
-        if role == "admin":
+        if role == UserRole.ADMIN:
             logger.warning("Admin self-registration blocked for %s", email)
             raise ForbiddenError("Cannot self-register as admin")
 
