@@ -13,7 +13,7 @@ from src.core.security import (
     hash_password,
     verify_password,
 )
-from src.modules.user.repository import AuthSession, CoachProfile, StudentProfile, User
+from src.modules.user.repository import AuthSession, CoachProfile, StudentProfile, User, UserRole
 from src.modules.user.schemas import UserCreate, UserUpdate
 
 
@@ -95,11 +95,13 @@ class UserService:
             self.db.add(profile)
 
         await self.db.commit()
-        return await self.get_by_id(user.id)
+        user_id = user.id
+        self.db.expire(user)
+        return await self.get_by_id(user_id)
 
     # ── Auth ──────────────────────────────────────────────
 
-    async def register(self, username: str, email: str, password: str, full_name: str, role: str) -> dict:
+    async def register(self, username: str, email: str, password: str, full_name: str, role: UserRole) -> dict:
         from src.modules.user.schemas import UserCreate
 
         if role == "admin":
@@ -125,7 +127,13 @@ class UserService:
         result = await self.db.execute(select(AuthSession).where(AuthSession.token == refresh_token))
         session = result.scalar_one_or_none()
 
-        if not session or session.expires_at < datetime.now(timezone.utc):
+        now = datetime.now(timezone.utc)
+        if not session:
+            raise UnauthorizedError("Refresh token expired or invalid")
+        expires_at = session.expires_at
+        if expires_at.tzinfo is None:
+            expires_at = expires_at.replace(tzinfo=timezone.utc)
+        if expires_at < now:
             raise UnauthorizedError("Refresh token expired or invalid")
 
         await self.db.delete(session)
