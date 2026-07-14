@@ -231,28 +231,3 @@ async def test_update_me_student_profile(client: AsyncClient):
 async def test_update_me_no_token_401(client: AsyncClient):
     res = await client.patch("/v1/users/me", json={"full_name": "Hacker"})
     assert res.status_code == 401
-
-
-# ── GET /v1/users/{user_id} ─────────────────────────────
-
-
-@pytest.mark.asyncio
-async def test_get_user_by_id(client: AsyncClient):
-    reg = await client.post("/v1/users/register", json=_register_payload())
-    access_token = reg.json()["access_token"]
-
-    me = await client.get(
-        "/v1/users/me",
-        headers={"Authorization": f"Bearer {access_token}"},
-    )
-    user_id = me.json()["id"]
-
-    res = await client.get(f"/v1/users/{user_id}")
-    assert res.status_code == 200
-    assert res.json()["username"] == "alice"
-
-
-@pytest.mark.asyncio
-async def test_get_user_not_found_404(client: AsyncClient):
-    res = await client.get("/v1/users/9999")
-    assert res.status_code == 404

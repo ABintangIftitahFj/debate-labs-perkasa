@@ -1,21 +1,20 @@
 from datetime import datetime, timedelta, timezone
+from typing import Any
 
 import pytest
-import pytest_asyncio
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.exceptions import ConflictError, ForbiddenError, NotFoundError, UnauthorizedError
-from src.core.security import create_refresh_token, hash_password
-from src.modules.user.repository import AuthSession, User, UserRole
+from src.modules.user.repository import AuthSession, UserRole
 from src.modules.user.schemas import UserCreate, UserUpdate
 from src.modules.user.service import UserService
 
 
 # ── helpers ─────────────────────────────────────────────
 
-def _student_create(**overrides) -> UserCreate:
-    defaults = dict(
+def _student_create(**overrides: Any) -> UserCreate:
+    defaults: dict[str, Any] = dict(
         username="alice",
         email="alice@example.com",
         password="secret123",
@@ -26,8 +25,8 @@ def _student_create(**overrides) -> UserCreate:
     return UserCreate(**defaults)
 
 
-def _coach_create(**overrides) -> UserCreate:
-    defaults = dict(
+def _coach_create(**overrides: Any) -> UserCreate:
+    defaults: dict[str, Any] = dict(
         username="bob",
         email="bob@example.com",
         password="secret456",
